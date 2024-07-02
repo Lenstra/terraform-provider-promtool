@@ -64,13 +64,11 @@ func (p *PromtoolProvider) Configure(ctx context.Context, req provider.Configure
 }
 
 func (p *PromtoolProvider) Resources(ctx context.Context) []func() resource.Resource {
-	return []func() resource.Resource{
-	}
+	return []func() resource.Resource{}
 }
 
 func (p *PromtoolProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{
-	}
+	return []func() datasource.DataSource{}
 }
 
 func (p *PromtoolProvider) Functions(ctx context.Context) []func() function.Function {
