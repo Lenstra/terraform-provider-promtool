@@ -1,3 +1,3 @@
-provider "scaffolding" {
+provider "promtool" {
   # example configuration here
 }
