@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     promtool = {
-      source = "kevineor/promtool"
+      source = "lenstra/promtool"
     }
   }
 }
