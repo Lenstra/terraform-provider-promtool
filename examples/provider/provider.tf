@@ -1,3 +1,77 @@
-provider "promtool" {
-  # example configuration here
+terraform {
+  required_providers {
+    promtool = {
+      source = "lenstra/promtool"
+    }
+  }
+}
+
+## Rules check example
+
+resource "local_file" "prom_rule_file_distant" {
+  content  = local.rules_config
+  filename = "./generated/rules.yml"
+
+  lifecycle {
+    precondition {
+      condition     = provider::promtool::check_rules(local.rules_config)
+      error_message = "Rules are not valid"
+    }
+  }
+}
+
+locals {
+  rules_config = <<-EOT
+    groups:
+    - name: example
+      rules:
+      - alert: HighRequestLatency
+        expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+        for: 10m
+        labels:
+          severity: page
+        annotations:
+          summary: High request latency
+    EOT
+}
+
+## Config check example
+
+resource "local_file" "prom_config_file_distant" {
+  content  = local.config
+  filename = "./generated/config.yml"
+
+  lifecycle {
+    precondition {
+      condition     = provider::promtool::check_config(local.config)
+      error_message = "Rules are not valid"
+    }
+  }
+}
+
+locals {
+  config = <<-EOT
+  global:
+    scrape_interval:     15s
+    evaluation_interval: 15s
+
+  alerting:
+    alertmanagers:
+    - static_configs:
+      - targets:
+        - localhost:9093
+
+  scrape_configs:
+    - job_name: 'prometheus'
+      static_configs:
+      - targets: ['localhost:9090']
+
+    - job_name: 'node_exporter'
+      static_configs:
+      - targets: ['localhost:9100']
+
+    - job_name: 'alertmanager'
+      static_configs:
+      - targets: ['localhost:9093']
+    EOT
 }

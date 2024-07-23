@@ -3,12 +3,12 @@
 page_title: "check_rules function - promtool"
 subcategory: ""
 description: |-
-  Validate Prometheus configuration
+  Validate Prometheus rules configuration
 ---
 
 # function: check_rules
 
-This function validates a Prometheus configuration file.
+This function validates a Prometheus rules configuration file.
 
 
 

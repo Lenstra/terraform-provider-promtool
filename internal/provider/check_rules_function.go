@@ -23,8 +23,8 @@ func (f *CheckRulesFunction) Metadata(ctx context.Context, req function.Metadata
 
 func (f *CheckRulesFunction) Definition(ctx context.Context, req function.DefinitionRequest, resp *function.DefinitionResponse) {
 	resp.Definition = function.Definition{
-		Summary:     "Validate Prometheus configuration",
-		Description: "This function validates a Prometheus configuration file.",
+		Summary:     "Validate Prometheus rules configuration",
+		Description: "This function validates a Prometheus rules configuration file.",
 		Parameters: []function.Parameter{
 			function.StringParameter{
 				Name:        "config",
