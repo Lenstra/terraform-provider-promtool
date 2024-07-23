@@ -18,11 +18,8 @@ package promtool
 const (
 	successExitCode = 0
 	failureExitCode = 1
-	// Exit code 3 is used for "one or more lint issues detected".
 
 	lintOptionAll            = "all"
 	lintOptionDuplicateRules = "duplicate-rules"
 	lintOptionNone           = "none"
-	checkHealth              = "/-/healthy"
-	checkReadiness           = "/-/ready"
 )
