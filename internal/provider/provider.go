@@ -15,17 +15,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-const (
-	successExitCode = 0
-	failureExitCode = 1
-
-	lintOptionAll            = "all"
-	lintOptionDuplicateRules = "duplicate-rules"
-	lintOptionNone           = "none"
-	checkHealth              = "/-/healthy"
-	checkReadiness           = "/-/ready"
-)
-
 // Ensure PromtoolProvider satisfies various provider interfaces.
 var _ provider.Provider = &PromtoolProvider{}
 var _ provider.ProviderWithFunctions = &PromtoolProvider{}
@@ -40,7 +29,7 @@ type PromtoolProvider struct {
 
 // PromtoolProviderModel describes the provider data model.
 type PromtoolProviderModel struct {
-	Endpoint types.String `tfsdk:"endpoint"`
+	lintConfig types.String `tfsdk:"lint-config"`
 }
 
 func (p *PromtoolProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -51,6 +40,10 @@ func (p *PromtoolProvider) Metadata(ctx context.Context, req provider.MetadataRe
 func (p *PromtoolProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
+			"lint-config": schema.StringAttribute{
+				Description: "The lint configuration to use. The following options are available: all, duplicate-rules, no.",
+				Required:    false,
+			},
 			//TODO : add linter configuration
 		},
 	}
