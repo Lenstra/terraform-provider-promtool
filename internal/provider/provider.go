@@ -18,8 +18,6 @@ import (
 const (
 	successExitCode = 0
 	failureExitCode = 1
-	// Exit code 3 is used for "one or more lint issues detected".
-	lintErrExitCode = 3
 
 	lintOptionAll            = "all"
 	lintOptionDuplicateRules = "duplicate-rules"

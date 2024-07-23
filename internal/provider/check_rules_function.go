@@ -54,9 +54,7 @@ func (f *CheckRulesFunction) Run(ctx context.Context, req function.RunRequest, r
 	resp.Error = function.ConcatFuncErrors(resp.Error, resp.Result.Set(ctx, true))
 }
 
-// TODO add lint config
 func CheckRules(content string, resp *function.RunResponse) bool {
-
 	rgs, errs := rulefmt.Parse([]byte(content))
 	for _, e := range errs {
 		if e != nil {
