@@ -15,6 +15,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+const (
+	successExitCode = 0
+	failureExitCode = 1
+	// Exit code 3 is used for "one or more lint issues detected".
+	lintErrExitCode = 3
+
+	lintOptionAll            = "all"
+	lintOptionDuplicateRules = "duplicate-rules"
+	lintOptionNone           = "none"
+	checkHealth              = "/-/healthy"
+	checkReadiness           = "/-/ready"
+)
+
 // Ensure PromtoolProvider satisfies various provider interfaces.
 var _ provider.Provider = &PromtoolProvider{}
 var _ provider.ProviderWithFunctions = &PromtoolProvider{}
@@ -74,6 +87,7 @@ func (p *PromtoolProvider) DataSources(ctx context.Context) []func() datasource.
 func (p *PromtoolProvider) Functions(ctx context.Context) []func() function.Function {
 	return []func() function.Function{
 		NewCheckRulesFunction,
+		NewCheckConfigFunction,
 	}
 }
 

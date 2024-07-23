@@ -12,12 +12,6 @@ import (
 	"github.com/prometheus/prometheus/model/rulefmt"
 )
 
-const (
-	lintOptionAll            = "all"
-	lintOptionDuplicateRules = "duplicate-rules"
-	lintOptionNone           = "none"
-)
-
 // Ensure the implementation satisfies the desired interfaces.
 var _ function.Function = &CheckRulesFunction{}
 
@@ -52,11 +46,22 @@ func (f *CheckRulesFunction) Run(ctx context.Context, req function.RunRequest, r
 		return
 	}
 
+	err := CheckRules(content, resp)
+	if err {
+		return
+	}
+
+	resp.Error = function.ConcatFuncErrors(resp.Error, resp.Result.Set(ctx, true))
+}
+
+// TODO add lint config
+func CheckRules(content string, resp *function.RunResponse) bool {
+
 	rgs, errs := rulefmt.Parse([]byte(content))
 	for _, e := range errs {
 		if e != nil {
 			resp.Error = function.ConcatFuncErrors(resp.Error, &function.FuncError{Text: e.Error()})
-			return
+			return true
 		}
 	}
 
@@ -64,11 +69,10 @@ func (f *CheckRulesFunction) Run(ctx context.Context, req function.RunRequest, r
 	for _, e := range errs {
 		if e != nil {
 			resp.Error = function.ConcatFuncErrors(resp.Error, &function.FuncError{Text: e.Error()})
-			return
+			return true
 		}
 	}
-
-	resp.Error = function.ConcatFuncErrors(resp.Error, resp.Result.Set(ctx, true))
+	return false
 }
 
 type lintConfig struct {

@@ -1,29 +1,17 @@
-terraform {
-  required_providers {
-    promtool = {
-      source = "lenstra/promtool"
-    }
-  }
-}
-
-data "local_file" "prom_file_local" {
-  filename = "../rules.yml"
-}
-
-resource "local_file" "prom_file_distant" {
-  content  = local.config
+resource "local_file" "prom_rule_file_distant" {
+  content  = local.rules_config
   filename = "./generated/rules.yml"
 
   lifecycle {
     precondition {
-      condition     = local.is_config_valid
+      condition     = local.is_rules_config_valid
       error_message = "Rules are not valid"
     }
   }
 }
 
 locals {
-  config = <<-EOT
+  rules_config = <<-EOT
     groups:
     - name: example
       rules:
@@ -36,10 +24,10 @@ locals {
           summary: High request latency
     EOT
 
-  is_config_valid = provider::promtool::check_rules(local.config)
+  is_rules_config_valid = provider::promtool::check_rules(local.rules_config)
 }
 
-output "bla" {
-  value = local.is_config_valid
+output "rules" {
+  value = local.is_rules_config_valid
 
 }
