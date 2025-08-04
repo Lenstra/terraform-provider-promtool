@@ -26,7 +26,7 @@ import (
 )
 
 func CheckRules(content string, resp *function.RunResponse) bool {
-	rgs, errs := rulefmt.Parse([]byte(content))
+	rgs, errs := rulefmt.Parse([]byte(content), false)
 	for _, e := range errs {
 		if e != nil {
 			resp.Error = function.ConcatFuncErrors(resp.Error, &function.FuncError{Text: e.Error()})
@@ -116,11 +116,11 @@ func compare(a, b compareRuleType) int {
 	return labels.Compare(a.label, b.label)
 }
 
-func ruleMetric(rule rulefmt.RuleNode) string {
-	if rule.Alert.Value != "" {
-		return rule.Alert.Value
+func ruleMetric(rule rulefmt.Rule) string {
+	if rule.Alert != "" {
+		return rule.Alert
 	}
-	return rule.Record.Value
+	return rule.Record
 }
 
 func checkDuplicates(groups []rulefmt.RuleGroup) []compareRuleType {
