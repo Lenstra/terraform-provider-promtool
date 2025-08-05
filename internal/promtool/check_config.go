@@ -23,8 +23,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/go-kit/log"
 	config_util "github.com/prometheus/common/config"
+	"github.com/prometheus/common/promslog"
 	"github.com/prometheus/prometheus/config"
 	"github.com/prometheus/prometheus/discovery"
 	"github.com/prometheus/prometheus/discovery/file"
@@ -37,7 +37,7 @@ import (
 )
 
 func CheckConfig(content string, checkSyntaxOnly bool) ([]string, error) {
-	cfg, err := config.Load(content, false, log.NewNopLogger())
+	cfg, err := config.Load(content, promslog.NewNopLogger())
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +166,7 @@ func checkTargetGroupsForScrapeConfig(targetGroups []*targetgroup.Group, scfg *c
 	lb := labels.NewBuilder(labels.EmptyLabels())
 	for _, tg := range targetGroups {
 		var failures []error
-		targets, failures = scrape.TargetsFromGroup(tg, scfg, false, targets, lb)
+		targets, failures = scrape.TargetsFromGroup(tg, scfg, targets, lb)
 		if len(failures) > 0 {
 			first := failures[0]
 			return first
